@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heydocker
+  namespace: dev
+  labels:
+    app: heydocker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: heydocker
+  template:
+    metadata:
+      labels:
+        app: heydocker
+    spec:
+      containers:
+      - name: heydocker
+        image: kavija/hellodocker:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: heydocker-service
+  namespace: dev
+spec:
+  selector:
+    app: heydocker
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
